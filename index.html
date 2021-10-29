@@ -100,8 +100,9 @@
 // 	attribution: attribution
 // }).addTo(map);
 
-var attribution = 'Maps: <a href="https://www.stadt-zuerich.ch/portal/de/index/ogd.html" target="_blank">Open Data Zürich</a>';
-var attributionKanton = '<a href="http://www.are.zh.ch/internet/baudirektion/are/de/geoinformation/geodaten_uebersicht/Open_Data_Kanton_Zuerich.html" target="_blank">Open Data Kanton Zürich</a>';
+var attribution = 'Quellen: <a href="https://www.stadt-zuerich.ch/geodaten/" target="_blank">Stadt Zürich</a>';
+var attributionKanton = '<a href="http://www.are.zh.ch/internet/baudirektion/are/de/geoinformation/geodaten_uebersicht/Open_Data_Kanton_Zuerich.html" target="_blank">Kanton Zürich</a>';
+var attributionSwisstopo = '<a href="https://www.swisstopo.admin.ch" target="_blank">swisstopo</a>'
 var wmsUrlZh = 'https://www.ogd.stadt-zuerich.ch/wms/WMS-ZH-STZH-OGD?';
 
 var layerLeft = 'Luftbild1976';
@@ -123,105 +124,116 @@ var layerRight = 'OP_2013_STZH.tif';
 // 		 detectRetina: true
 // 	}).addTo(map);
 
+let showHideElements = function(e) {
+	visible = !visible;
+	//console.log('On click');
+	document.querySelectorAll('input').forEach( input => {
+		if(input.labels==null || input.labels[0]==null) return;
+		if(!input.checked && !visible) input.labels[0].style.display = "none";
+		else input.labels[0].style.display = "block";
+		if(input.checked) input.labels[0].scrollIntoView(false);
+	});
+}
+
 var layers = [
 	{
-		name: 'Orthofoto 1946 (Swisstopo)',
+		name: 'Orthofoto 1946 (swisstopo)',
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg'
 	},
 	{
-		name: 'Orthofoto 1974 (Swisstopo)',
+		name: 'Orthofoto 1974 (swisstopo)',
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1974/2056/{z}/{x}/{y}.jpeg'
 	},
 	{
-		name: 'Orthofoto 1975/1976',
+		name: 'Orthofoto 1975/1976 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1975_1976_Stadt_Zuerich___Sommer?'
 	},{
-		name: 'Orthofoto 1980 - Sommer',
+		name: 'Orthofoto 1980 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1980_Stadt_Zuerich___Sommer?'
 	},{
-		name: 'Orthofoto 1981 - Kanton',
+		name: 'Orthofoto 1981 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrtho81ZH?',
 		layers: ['ortho81'],
 	},{
-		name: 'Orthofoto 1985',
+		name: 'Orthofoto 1985 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1985_Stadt_Zuerich___Sommer?'
 	},{
-		name: 'Orthofoto 1990 - Sommer',
+		name: 'Orthofoto 1990 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1990_Stadt_Zuerich___Sommer?'
 	},{
-		name: 'Orthofoto 1995 - Sommer',
+		name: 'Orthofoto 1995 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1995_Stadt_Zuerich___Sommer?'
 	},{
-		name: 'Orthofoto 1999',
+		name: 'Orthofoto 1999 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1999_Stadt_Zuerich___Fruehling?'
 	},{
-		name: 'Orthofoto 2003',
+		name: 'Orthofoto 2003 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2003_Stadt_Zuerich___Fruehling?'
 	},{
-		name: 'Orthofoto 2007',
+		name: 'Orthofoto 2007 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2007_Stadt_Zuerich___Fruehling?'
 	},{
-		name: 'Orthofoto 2010',
+		name: 'Orthofoto 2010 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2010_Bund___Sommer___quasi_true?'
 	},{
-		name: 'Orthofoto 2011',
+		name: 'Orthofoto 2011 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2011_Stadt_Zuerich___Fruehling?'
 	},{
-		name: 'Orthofoto 2013',
+		name: 'Orthofoto 2013 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2013_Stadt_Zuerich___Fruehling?'
 	},{
-		name: 'Orthofoto 2014 - Kanton',
+		name: 'Orthofoto 2014 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_s_2014']
 	},{
-		name: 'Orthofoto 2015/2016 - Kanton',
+		name: 'Orthofoto 2015/2016 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_w']
 	},{
-		name: 'Orthofoto 2018 - Kanton',
+		name: 'Orthofoto 2018 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_s_2018']
 	},{
-		name: 'Orthofoto 2020 - Kanton',
+		name: 'Orthofoto 2020 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_s_2020']
 	},{
-		name: 'Historischer Übersichtsplan 1793',
+		name: 'Historischer Übersichtsplan 1793 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1793__Muellerplan_?'
 	},{
-		name: 'Historische Karte 1850 (Wild-Karte)',
+		name: 'Historische Karte 1850 (Kanton)',
 		url: 'https://wms.zh.ch/OGDWildkarteZH?',
 		layers: ['wild', 'bezirkslabels'],
 	},{
 		name: 'Historischer Übersichtsplan 1859/1867',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1859_1867__Altstadtkataster_?'
 	},{
-		name: 'Historischer Übersichtsplan 1860',
+		name: 'Historischer Stadtplan 1860',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1860?'
 	},{
-		name: 'Historischer Übersichtsplan 1864',
+		name: 'Historischer Stadtplan 1864',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1864?'
 	},{
-		name: 'Historischer Übersichtsplan 1900',
+		name: 'Historischer Stadtplan 1900',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1900?'
 	},{
-		name: 'Historischer Übersichtsplan 1932-1961',
+		name: 'Historischer Stadtplan 1932-1961',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_zwischen_1932_und_1961?'
 	},{
-		name: 'Basiskarte Zürich',
+		name: 'Basiskarte Zürich (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Basiskarte_Zuerich_Raster?'
 	},{
-		name: 'Übersichtsplan Kanton ZH',
+		name: 'Übersichtsplan (Kanton)',
 		url: 'https://wms.zh.ch/upwms?',
 		layers: ['upwms']
 	},{
-		name: 'Swisstopo Landeskarte',
+		name: 'Landeskarte (swisstopo)',
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/2056/{z}/{x}/{y}.jpeg'
 	},{
-		name: 'Hiks-Siegfried Karte',
+		name: 'Hiks-Siegfried Karte (swisstopo)',
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.hiks-siegfried/default/current/2056/{z}/{x}/{y}.png'
 	},{
-		name: 'Hiks-Dufour Karte',
+		name: 'Hiks-Dufour Karte (swisstopo)',
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.hiks-dufour/default/current/2056/{z}/{x}/{y}.png'
 	}
 ];
@@ -246,7 +258,6 @@ var wmsTileLayer = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
 		 layers: ['ortho81'],
 		 detectRetina: false,
 		 format: 'image/jpeg',
-		 attribution: 'Left'
 	});//.addTo(map);
 
 var wmsTileLayer2 = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
@@ -254,7 +265,6 @@ var wmsTileLayer2 = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
 		 layers: ['ortho81'],
 		 detectRetina: false,
 		 format: 'image/jpeg',
-		 attribution: 'Left'
 	});//.addTo(map);
 
 var left = 	wmsTileLayer.addTo(map);
@@ -293,7 +303,7 @@ legendLeft.onAdd = function (map) {
 		var checked = '';
 		if(layers[i]==layerLeft) checked = 'checked ';
 		 //"<input type=\"radio\" onClick=\"changeRight('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers1\"><span>"+layers[i].name+"</span></input><br/>"
-		var checkboxString = '<input type="radio" id="l'+i+'" onClick="changeLeft('+i+')" name="leaflet-base-layers2"'+checked+'">';
+		var checkboxString = '<input type="radio" id="l'+i+'" onClick="onLeftClick('+i+')" name="leaflet-base-layers2"'+checked+'">';
 		checkboxString += '<label for="l'+i+'">'+layers[i].name+'</label>';
 		div.innerHTML += checkboxString;
 	}
@@ -310,7 +320,7 @@ legendRight.onAdd = function (map) {
 		var checked = '';
 		if(layers[i]==layerRight) checked = 'checked ';
 		 //"<input type=\"radio\" onClick=\"changeRight('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers1\"><span>"+layers[i].name+"</span></input><br/>"
-		var checkboxString = '<input type="radio" id="r'+i+'" onClick="changeRight('+i+')" name="leaflet-base-layers1"'+checked+'">';
+		var checkboxString = '<input type="radio" id="r'+i+'" onClick="onRightClick('+i+')" name="leaflet-base-layers1"'+checked+'">';
 		checkboxString += '<label for="r'+i+'">'+layers[i].name+'</label>';
 		div.innerHTML += checkboxString;
 	}
@@ -321,25 +331,32 @@ legendRight.addTo(map);
 
 // map.setView([47.377744, 8.535698], 26);
 
-let showHideElements = function(e) {
-	visible = !visible;
-	//console.log('On click');
-	document.querySelectorAll('input').forEach( input => {
-		if(input.labels==null || input.labels[0]==null) return;
-		if(!input.checked && !visible) input.labels[0].style.display = "none";
-		else input.labels[0].style.display = "block";
-		if(input.checked) input.labels[0].scrollIntoView(false);
-	});
-}
 
-map.attributionControl.addAttribution("by <a target='_blank' href='https://www.linkedin.com/in/robert-salzer-a3b55b6b'>Robert Salzer</a>");
+
+map.attributionControl.addAttribution("created by <a target='_blank' href='https://twitter.com/rob_salzer'>Robert Salzer</a>");
+map.attributionControl.addAttribution(attribution);
+map.attributionControl.addAttribution(attributionKanton);
+map.attributionControl.addAttribution(attributionSwisstopo);
+
 //
 var visible = false;
 showHideElements();
 
 map.on('click', showHideElements);
 
+function onLeftClick(i) {
+	if(!visible)
+		showHideElements()
+	else
+		changeLeft(i);
+}
 
+function onRightClick(i) {
+	if(!visible)
+		showHideElements()
+	else
+		changeRight(i);
+}
 
 function changeRight(i) {
 	layerRight = layers[i];
@@ -351,33 +368,13 @@ function changeRight(i) {
 	right.setParams(
 	 	{layers: cardLayers}
 	);
-
+	if(i==0)
+		left.options.maxNativeZoom = 25;
+	else
+		left.options.maxNativeZoom = crs.options.resolutions.length-1;
 }
 
 function changeLeft(i) {
-	// left.remove();
-	// layerLeft = layers[i];
-	// if(layerLeft.url.startsWith('https://wmts')) {
-	// 	left = tileLayer.addTo(map);
-	// 	left.setUrl(layerLeft.url);
-	// 	if(i==0)
-	// 		left.options.maxNativeZoom = 25;
-	// 	else {
-	// 		left.options.maxNativeZoom = crs.options.resolutions.length-1;
-	// 	}
-	// }
-	// else {
-	// 	left = wmsTileLayer.addTo(map);
-	// 	left.setUrl(layerLeft.url);
-	// 	let cardLayers = ['wmslayers'];
-	// 	if(layerLeft.layers) {
-	// 		cardLayers = layerLeft.layers;
-	// 	}
-	// 	left.setParams(
-	// 		{layers: cardLayers}
-	// 	);
-	// }
-	// sideBySide.setLeftLayers(left);
 	layerLeft = layers[i];
 	left.setUrl(layerLeft.url);
 	let cardLayers = ['wmslayers'];
