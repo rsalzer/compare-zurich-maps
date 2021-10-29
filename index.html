@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <head>
 	<meta charset=utf-8 />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -9,8 +9,8 @@
     <script src="lib/leaflet-side-by-side.js"></script>
 		<!-- <script src="lib/leaflet.select-layers.min.js"></script> -->
     <meta property="og:title" content="Stadtplanvergleich" />
-    <meta property="og:url" content="http://salzer.it/map" />
-    <meta property="og:description" content="Tool, um die Karten der Stadt Zürich miteinander zu vergleichen. Datenquelle: Open Data Zürich" />
+    <meta property="og:url" content="http://rsalzer.github.io/compare-zurich-maps" />
+    <meta property="og:description" content="Tool, um die Karten der Stadt Zürich miteinander zu vergleichen. Datenquelle: Open Data Stadt Zürich, Open Data Kanton Zürich, swisstopo" />
     <meta property="og:image" content="http://salzer.it/map/preview2.png" />
     <meta name="twitter:card" value="summary">
     <meta name="twitter:creator" content="@rob_salzer">
@@ -22,6 +22,7 @@
 		.leaflet-control-layers {
         max-height: 200px;
         overflow: auto;
+				background:rgba(255,255,255,0.5);
       }
 	</style>
 	<!-- Esri Leaflet Geocoder -->
@@ -92,6 +93,14 @@ var layerRight = 'OP_2013_STZH.tif';
 // 	}).addTo(map);
 
 var layers = [
+	{
+		name: 'Orthofoto 1946 (Swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg'
+	},
+	{
+		name: 'Orthofoto 1974 (Swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1974/2056/{z}/{x}/{y}.jpeg'
+	},
 	{
 		name: 'Orthofoto 1975/1976',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1975_1976_Stadt_Zuerich___Sommer?'
@@ -174,37 +183,51 @@ var layers = [
 		name: 'Übersichtsplan Kanton ZH',
 		url: 'https://wms.zh.ch/upwms?',
 		layers: ['upwms']
+	},{
+		name: 'Swisstopo Landeskarte',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/2056/{z}/{x}/{y}.jpeg'
+	},{
+		name: 'Hiks-Siegfried Karte',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.hiks-siegfried/default/current/2056/{z}/{x}/{y}.png'
+	},{
+		name: 'Hiks-Dufour Karte',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swisstlm3d-karte-farbe/default/current/2056/{z}/{x}/{y}.png'
 	}
 ];
 
 
 //layers[9].url
-var left = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
-		 maxZoom: crs.options.resolutions.length-1,
-		 layers: ['ortho81'],
-		 detectRetina: false,
-		 format: 'image/jpeg',
-	}).addTo(map);
 
-var right = L.tileLayer.wms('https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1980_Stadt_Zuerich___Sommer?', {
-		 maxZoom: crs.options.resolutions.length-1,
-		 layers: ['wmslayers'],
-		 detectRetina: false,
-		 format: 'image/jpeg',
-	}).addTo(map);
 //	https://www.ogd.stadt-zuerich.ch/wms/geoportal/Historischer_Uebersichtsplan_der_Stadt_Zuerich_um_1859_1867__Altstadtkataster_
 // https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/2056/
 
 //https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg
 
-// var left = L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg', {
-// 			maxNativeZoom: crs.options.resolutions.length-4,
-// 			maxZoom: crs.options.resolutions.length-1,
-// 			//detectRetina: true,
-// 	  }).addTo(map);
+var tileLayer = L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg', {
+			maxNativeZoom: crs.options.resolutions.length-4,
+			maxZoom: crs.options.resolutions.length-1,
+			attribution: 'swisstopo'
+			//detectRetina: true,
+	  });//.addTo(map);
 
+var wmsTileLayer = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
+		 maxZoom: crs.options.resolutions.length-1,
+		 layers: ['ortho81'],
+		 detectRetina: false,
+		 format: 'image/jpeg',
+		 attribution: 'Left'
+	});//.addTo(map);
 
+var wmsTileLayer2 = 	L.tileLayer.wms('https://wms.zh.ch/OGDOrtho81ZH?', {
+		 maxZoom: crs.options.resolutions.length-1,
+		 layers: ['ortho81'],
+		 detectRetina: false,
+		 format: 'image/jpeg',
+		 attribution: 'Left'
+	});//.addTo(map);
 
+var left = 	wmsTileLayer.addTo(map);
+var right = wmsTileLayer2.addTo(map);
 // var right = L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2020/2056/{z}/{x}/{y}.jpeg', {
 // 			//maxNativeZoom: crs.options.resolutions.length-1,
 // 			maxZoom: crs.options.resolutions.length-1,
@@ -224,8 +247,10 @@ var geoadminUrl = 'https://wms.geo.admin.ch/?';
 // 				'Uebersichtsplan1900', 'Uebersichtsplan1864','Uebersichtsplan1860', 'Uebersichtsplan1793' ];
 //
 
-var layerRight = layers[0];
-var layerLeft = layers[1];
+changeLeft(5);
+changeRight(6);
+// var layerRight = layers[0];
+// var layerLeft = layers[1];
 
 var legend = L.control({position: 'topright'});
 legend.onAdd = function (map) {
@@ -257,7 +282,7 @@ legend2.addTo(map);
 // map.setView([47.377744, 8.535698], 26);
 var sideBySide = L.control.sideBySide(left, right);
 sideBySide.addTo(map);
-// map.attributionControl.addAttribution("30.11.2016 by <a target='_blank' href='https://www.linkedin.com/in/robert-salzer-a3b55b6b'>Robert Salzer</a>");
+map.attributionControl.addAttribution("by <a target='_blank' href='https://www.linkedin.com/in/robert-salzer-a3b55b6b'>Robert Salzer</a>");
 //
 var visible = true;
 map.on('click', function(e) {
@@ -285,14 +310,32 @@ function changeRight(i) {
 }
 
 function changeLeft(i) {
+	// left.remove();
+	// layerLeft = layers[i];
+	// if(layerLeft.url.startsWith('https://wmts')) {
+	// 	left = tileLayer.addTo(map);
+	// 	left.setUrl(layerLeft.url);
+	// }
+	// else {
+	// 	left = wmsTileLayer.addTo(map);
+	// 	left.setUrl(layerLeft.url);
+	// 	let cardLayers = ['wmslayers'];
+	// 	if(layerLeft.layers) {
+	// 		cardLayers = layerLeft.layers;
+	// 	}
+	// 	left.setParams(
+	// 		{layers: cardLayers}
+	// 	);
+	// }
+	// sideBySide.setLeftLayers(left);
 	layerLeft = layers[i];
 	left.setUrl(layerLeft.url);
 	let cardLayers = ['wmslayers'];
 	if(layerLeft.layers) {
-		cardLayers = layerRight.layers;
+		cardLayers = layerLeft.layers;
 	}
 	left.setParams(
-		{layers: cardLayers}
+	 	{layers: cardLayers}
 	);
 }
 
