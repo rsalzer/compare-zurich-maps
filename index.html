@@ -4,8 +4,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>Stadtplanvergleich Zürich </title>
 	    <!-- Load Leaflet from CDN-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet-src.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet-src.js"></script>
     <script src="lib/leaflet-side-by-side.js"></script>
 		<!-- <script src="lib/leaflet.select-layers.min.js"></script> -->
     <meta property="og:title" content="Stadtplanvergleich" />
@@ -20,10 +20,39 @@
 /* 			font-size: 30px; */
 		}
 		.leaflet-control-layers {
-        max-height: 200px;
-        overflow: auto;
-				background:rgba(255,255,255,0.5);
+        max-height: 300px;
+        overflow-y: scroll
+				/* background:rgba(255,255,255,0.5); */
       }
+
+			input[type=radio]{
+			  position: absolute;
+			  visibility: hidden;
+			}
+
+			label{
+			  display: flex;
+			  justify-content: center; /* align horizontal */
+			  align-items: center; /* align vertical */
+			  line-height: normal;
+			  font-weight: 300;
+			  font-size: 1em;
+				padding: 8px;
+			  width: 100%;
+			  height: 100%;
+			  cursor: pointer;
+			  -webkit-transition: all 0.25s linear;
+				/* bsorder-radius: 10px; */
+				border: 1px solid #333;
+			  /* padding: 25px 25px 25px 80px; */
+			  /* margin: 10px auto; */
+			}
+
+			input[type=radio]:checked + label{
+			  background: #5555aa;
+				color: white;
+				/* background: red; /* For browsers that do not support gradients */ */
+			}
 	</style>
 	<!-- Esri Leaflet Geocoder -->
 	<script src="lib/proj4.js"></script>
@@ -56,6 +85,7 @@
 			crs: crs,
 			maxZoom: crs.options.resolutions.length-1,
 			minZoom: 16,
+			tap: false
 	}).setView([47.365, 8.54], 25);
 	console.log(crs.options.resolutions[25]);
 
@@ -246,56 +276,69 @@ var geoadminUrl = 'https://wms.geo.admin.ch/?';
 // 				'Luftbild1980', 'Luftbild1976', 'Stadtplan', 'UebersichtsplanAktuell', 'Uebersichtsplan2015', 'Uebersichtsplan1978',
 // 				'Uebersichtsplan1900', 'Uebersichtsplan1864','Uebersichtsplan1860', 'Uebersichtsplan1793' ];
 //
-
+var sideBySide = L.control.sideBySide(left, right);
+sideBySide.addTo(map);
 changeLeft(1);
 changeRight(17);
 // var layerRight = layers[0];
 // var layerLeft = layers[1];
 
-var legend = L.control({position: 'topright'});
-legend.onAdd = function (map) {
+var legendLeft = L.control({position: 'bottomleft'});
+legendLeft.onAdd = function (map) {
 	let div = L.DomUtil.create('div', 'leaflet-control-layers');
 	L.DomEvent.disableClickPropagation(div);
 	L.DomEvent.disableScrollPropagation(div);
 	for (i = 0; i < layers.length; i++) {
 		var checked = '';
-		if(layers[i]==layerRight) checked = 'checked=\"true\" ';
-		div.innerHTML += "<input type=\"radio\" onClick=\"changeRight('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers1\"><span>"+layers[i].name+"</span></input><br/>"
+		if(layers[i]==layerLeft) checked = 'checked ';
+		 //"<input type=\"radio\" onClick=\"changeRight('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers1\"><span>"+layers[i].name+"</span></input><br/>"
+		var checkboxString = '<input type="radio" id="l'+i+'" onClick="changeLeft('+i+')" name="leaflet-base-layers2"'+checked+'">';
+		checkboxString += '<label for="l'+i+'">'+layers[i].name+'</label>';
+		div.innerHTML += checkboxString;
 	}
 	return div;
 };
-legend.addTo(map);
+legendLeft.addTo(map);
+
+var legendRight = L.control({position: 'topright'});
+legendRight.onAdd = function (map) {
+	let div = L.DomUtil.create('div', 'leaflet-control-layers');
+	L.DomEvent.disableClickPropagation(div);
+	L.DomEvent.disableScrollPropagation(div);
+	for (i = 0; i < layers.length; i++) {
+		var checked = '';
+		if(layers[i]==layerRight) checked = 'checked ';
+		 //"<input type=\"radio\" onClick=\"changeRight('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers1\"><span>"+layers[i].name+"</span></input><br/>"
+		var checkboxString = '<input type="radio" id="r'+i+'" onClick="changeRight('+i+')" name="leaflet-base-layers1"'+checked+'">';
+		checkboxString += '<label for="r'+i+'">'+layers[i].name+'</label>';
+		div.innerHTML += checkboxString;
+	}
+	return div;
+};
+legendRight.addTo(map);
 //
-var legend2 = L.control({position: 'bottomleft'});
-legend2.onAdd = function (map) {
-	let div = L.DomUtil.create('div', 'leaflet-control-layers');
-	L.DomEvent.disableClickPropagation(div);
-	L.DomEvent.disableScrollPropagation(div);
-	for (i = 0; i < layers.length; i++) {
-		var checked = '';
-		if(layers[i]==layerLeft) checked = 'checked=\"true\" ';
-		div.innerHTML += "<input type=\"radio\" onClick=\"changeLeft('"+i+"')\" "+checked+"class=\"leaflet-control-layers-selector\" name=\"leaflet-base-layers2\"><span>"+layers[i].name+"</span></input><br/>"
-	}
-	return div;
-};
-legend2.addTo(map);
+
 // map.setView([47.377744, 8.535698], 26);
-var sideBySide = L.control.sideBySide(left, right);
-sideBySide.addTo(map);
+
+let showHideElements = function(e) {
+	visible = !visible;
+	//console.log('On click');
+	document.querySelectorAll('input').forEach( input => {
+		if(input.labels==null || input.labels[0]==null) return;
+		if(!input.checked && !visible) input.labels[0].style.display = "none";
+		else input.labels[0].style.display = "block";
+		if(input.checked) input.labels[0].scrollIntoView(false);
+	});
+}
+
 map.attributionControl.addAttribution("by <a target='_blank' href='https://www.linkedin.com/in/robert-salzer-a3b55b6b'>Robert Salzer</a>");
 //
-var visible = true;
-map.on('click', function(e) {
-    if(visible) {
-    	legend.remove();
-    	legend2.remove();
-    }
-    else {
-    	legend.addTo(map);
-    	legend2.addTo(map);
-    }
-    visible = !visible;
-} );
+var visible = false;
+showHideElements();
+
+map.on('click', showHideElements);
+
+
 
 function changeRight(i) {
 	layerRight = layers[i];
@@ -307,6 +350,7 @@ function changeRight(i) {
 	right.setParams(
 	 	{layers: cardLayers}
 	);
+
 }
 
 function changeLeft(i) {
@@ -315,6 +359,11 @@ function changeLeft(i) {
 	// if(layerLeft.url.startsWith('https://wmts')) {
 	// 	left = tileLayer.addTo(map);
 	// 	left.setUrl(layerLeft.url);
+	// 	if(i==0)
+	// 		left.options.maxNativeZoom = 25;
+	// 	else {
+	// 		left.options.maxNativeZoom = crs.options.resolutions.length-1;
+	// 	}
 	// }
 	// else {
 	// 	left = wmsTileLayer.addTo(map);
@@ -337,6 +386,10 @@ function changeLeft(i) {
 	left.setParams(
 	 	{layers: cardLayers}
 	);
+	if(i==0)
+		left.options.maxNativeZoom = 25;
+	else
+		left.options.maxNativeZoom = crs.options.resolutions.length-1;
 }
 
 </script>
