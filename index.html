@@ -141,46 +141,84 @@ var layers = [
 		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product_1946/default/1946/2056/{z}/{x}/{y}.jpeg'
 	},
 	{
-		name: 'Orthofoto 1974 (swisstopo)',
-		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1974/2056/{z}/{x}/{y}.jpeg'
+		name: 'Orthofoto 1970 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1970/2056/{z}/{x}/{y}.jpeg'
 	},
 	{
 		name: 'Orthofoto 1975/1976 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1975_1976_Stadt_Zuerich___Sommer?'
 	},{
+		name: 'Orthofoto 1976 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1976/2056/{z}/{x}/{y}.jpeg'
+	},
+	{
 		name: 'Orthofoto 1980 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1980_Stadt_Zuerich___Sommer?'
 	},{
 		name: 'Orthofoto 1981 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrtho81ZH?',
 		layers: ['ortho81'],
-	},{
+	},
+	{
+		name: 'Orthofoto 1982 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1982/2056/{z}/{x}/{y}.jpeg'
+	},
+	{
 		name: 'Orthofoto 1985 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1985_Stadt_Zuerich___Sommer?'
-	},{
+	},
+	{
+		name: 'Orthofoto 1987 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1987/2056/{z}/{x}/{y}.jpeg'
+	},
+	{
+		name: 'Orthofoto 1988 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1988/2056/{z}/{x}/{y}.jpeg'
+	},
+	{
 		name: 'Orthofoto 1990 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1990_Stadt_Zuerich___Sommer?'
+	},
+	{
+		name: 'Orthofoto 1994 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/1994/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 1995 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1995_Stadt_Zuerich___Sommer?'
 	},{
 		name: 'Orthofoto 1999 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_1999_Stadt_Zuerich___Fruehling?'
+	},
+	{
+		name: 'Orthofoto 2002 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2002/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2003 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2003_Stadt_Zuerich___Fruehling?'
+	},
+	{
+		name: 'Orthofoto 2006 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2006/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2007 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2007_Stadt_Zuerich___Fruehling?'
 	},{
 		name: 'Orthofoto 2010 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2010_Bund___Sommer___quasi_true?'
+	},
+	{
+		name: 'Orthofoto 2010 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2010/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2011 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2011_Stadt_Zuerich___Fruehling?'
 	},{
 		name: 'Orthofoto 2013 (Stadt)',
 		url: 'https://www.ogd.stadt-zuerich.ch/wms/geoportal/Orthofoto_2013_Stadt_Zuerich___Fruehling?'
+	},
+	{
+		name: 'Orthofoto 2013 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2013/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2014 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
@@ -189,10 +227,18 @@ var layers = [
 		name: 'Orthofoto 2015/2016 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_w']
+	},
+	{
+		name: 'Orthofoto 2016 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2016/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2018 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
 		layers: ['ortho_s_2018']
+	},
+	{
+		name: 'Orthofoto 2019 (swisstopo)',
+		url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/2019/2056/{z}/{x}/{y}.jpeg'
 	},{
 		name: 'Orthofoto 2020 (Kanton)',
 		url: 'https://wms.zh.ch/OGDOrthoZH?',
